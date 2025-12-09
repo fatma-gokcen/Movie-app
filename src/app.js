@@ -2,8 +2,10 @@ import { loadingSpinner } from "./components/loadingSpinner.js";
 import { errorMessage } from "./components/errorMessage.js";
 import { productList } from "./components/productList.js";
 
+// HTML içindeki "app" elementini seçiyoruz.
 const app = document.getElementById("app");
 
+// backtick (template litreal) kullanıldı çünkü: çok satırlı string + değişken eklemek için en pratik yol.
 app.innerHTML = `
   <h1>Movie App</h1>
   <div class = "search-box">
@@ -16,7 +18,9 @@ app.innerHTML = `
 const content = document.getElementById("content");
 
 const API_KEY = import.meta.env.VITE_API_KEY;
-const API_URL = `https://www.omdbapi.com/?apikey=${API_KEY}&s=batman`;
+const movies = ["batman", "joker", "avengers", "inception"];
+const randomMovie = movies[Math.floor(Math.random() * movies.length)];
+const API_URL = `https://www.omdbapi.com/?apikey=${API_KEY}&s=${randomMovie}`;
 
 loadMovies();
 
@@ -69,7 +73,7 @@ async function loadMovies() {
         console.log(data);
 
         if (!data.Search) {
-            throw new Error(data.Error || "Film bulunamadı!");
+            throw new Error(data.Error || "Movie not found!");
         }
 
         content.innerHTML = productList(data.Search);
