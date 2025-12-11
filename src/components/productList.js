@@ -1,17 +1,29 @@
+// productList.js
 export function productList(items) {
-    return `
+  return `
     <div class="movie-list">
       ${items
-            .map(
-                (item) => `
-          <div class="movie-card">
-            <img src="${item.Poster}" alt="${item.Title}" />
-            <h3>${item.Title}</h3>
-            <p>${item.Year}</p>
-          </div>
-        `
-            )
-            .join("")}
+      .map(
+        (item) => {
+          // Posteri kontrol et: N/A ise veya boş ise yer tutucu kullan
+          const poster = (item.Poster && item.Poster !== "N/A")
+            ? item.Poster
+            : "https://via.placeholder.com/300x450?text=Poster+Bulunamadı"; // <-- Yer tutucu URL
+
+          return `
+                  <div class="movie-card" data-imdbid="${item.imdbID}">
+                    <img 
+                      src="${poster}" 
+                      alt="${item.Title}" 
+                      onerror="this.onerror=null;this.src='https://via.placeholder.com/300x450?text=Yüklenemedi';" // <-- ÖNEMLİ: Hata durumunda resim değiştirme
+                    />
+                    <h3>${item.Title}</h3>
+                    <p>${item.Year}</p>
+                  </div>
+                `;
+        }
+      )
+      .join("")}
     </div>
   `;
 }
