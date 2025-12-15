@@ -41,6 +41,12 @@ document.getElementById("searchInput").addEventListener("keyup", (e) => {
     }
 });
 
+document.getElementById("searchInput").addEventListener("keyup", (e) => {
+    if (e.key === "Enter") {
+        const query = document.getElementById("")
+    }
+})
+
 // URL değiştiğinde (geri/ileri butonu) içeriği güncelle
 window.addEventListener('popstate', (event) => {
     const params = new URLSearchParams(window.location.search);
@@ -64,12 +70,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// Başlığa tıklanıldığında ana sayfaya yönlendirme
+document.querySelector("h1").addEventListener("click", () => {
+    history.pushState(null, '', window.location.pathname)
 
-// --- Fonksiyonlar ---
+    loadMovies();
 
-/**
- * Ana sayfa açılışında rastgele filmleri yükler.
- */
+    // Arama kuutusu temizlenecek
+    document.getElementById("searchInput").value = "";
+});
+
+//  Fonksiyonlar 
+
+// Ana sayfa açılışında rastgele filmleri yükler.
+
 async function loadMovies() {
     content.innerHTML = loadingSpinner();
 
@@ -82,7 +96,7 @@ async function loadMovies() {
         }
 
         content.innerHTML = productList(data.Search);
-        addMovieCardListeners(); // <-- KRİTİK: Dinleyicileri ekle
+        addMovieCardListeners();
     } catch (err) {
         content.innerHTML = errorMessage(err.message);
     }

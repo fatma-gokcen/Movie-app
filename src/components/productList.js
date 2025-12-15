@@ -1,4 +1,3 @@
-// productList.js
 export function productList(items) {
   return `
     <div class="movie-list">
