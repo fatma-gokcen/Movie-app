@@ -1,320 +1,192 @@
-/* Genel Ayarlar ve Dark Mode Teması */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #000000;
-    color: #ffffff;
+/* --- Genel Sıfırlamalar ve Temel Stil --- */
+:root {
+    --bg-color: #1a1a1a;
+    /* Koyu Arkaplan */
+    --text-color: #f0f0f0;
+    /* Açık Metin */
+    --primary-color: #0088cc;
+    /* Temel Vurgu Mavi */
+    --secondary-color: #ff5500;
+    /* İkincil Vurgu (Buton veya Aksan) */
+    --card-bg: #2b2b2b;
+    /* Kart Arkaplanı */
+}
+
+* {
     margin: 0;
     padding: 0;
-    line-height: 1.6;
+    box-sizing: border-box;
 }
 
-/*Başlık bölümü*/
-h1 {
-    text-align: center;
-    margin-top: 30px;
-    margin-bottom: 20px;
-    font-size: 2.5em;
-    color: #00bcd4;
-    text-shadow: 0 0 5px rgba(0, 188, 212, 0.5);
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 20px;
+}
+
+#app {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* --- Başlık ve Genel Yapı Stilleri --- */
+
+/* Başlık, Buton ve Arama Kutusu arasındaki hizalamayı sağlar */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #3a3a3a;
+    margin-bottom: 30px;
+}
+
+#appTitle {
+    color: var(--primary-color);
     cursor: pointer;
+    font-size: 2.5em;
+    font-weight: bold;
 }
 
-/* Arama Kutusu Bölümü */
+/* --- Buton Stilleri (Watchlist ve Ekle) --- */
+
+.primary-btn {
+    padding: 10px 15px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.primary-btn:hover {
+    background-color: #0066a2;
+}
+
+/* --- Arama Kutusu Stilleri --- */
+
 .search-box {
     display: flex;
-    justify-content: center;
-    margin: 30px 20px;
     gap: 10px;
+    margin-bottom: 40px;
 }
 
-.search-box input {
-    width: 300px;
-    /* Genişletilmiş input */
-    padding: 12px 15px;
-    border-radius: 8px;
-    /* Köşeleri yuvarla */
-    border: 2px solid #00bcd4;
-    background-color: #212121;
-    color: #e0e0e0;
-    font-size: 1.1em;
+#searchInput {
+    flex-grow: 1;
+    padding: 12px;
+    border: 1px solid #444;
+    border-radius: 6px;
+    background-color: #333;
+    color: var(--text-color);
+    font-size: 1em;
     outline: none;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.search-box input:focus {
-    border-color: #ffa940;
-    /* Focus'ta turuncu renk */
-    box-shadow: 0 0 10px rgba(255, 110, 64, 0.5);
-}
-
-.search-box button {
-    padding: 12px 25px;
-    border-radius: 8px;
+#searchBtn {
+    padding: 12px 20px;
+    background-color: var(--secondary-color);
+    color: white;
     border: none;
-    background-color: #00bcd4;
-    color: #121212;
-    /* Buton yazısını koyu yap */
-    font-size: 1.1em;
-    font-weight: bold;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: bold;
+    transition: background-color 0.2s;
 }
 
-.search-box button:hover {
-    background-color: #ffa940;
-    transform: translateY(-2px);
+#searchBtn:hover {
+    background-color: #d14600;
 }
 
-/* Film Listesi İçeriği */
-#content {
-    /* app.js'te kullanılan .movie-list class'ı bu div'in içinde oluşturuluyor. */
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-}
+/* --- Film Listesi Stilleri --- */
 
 .movie-list {
     display: grid;
-    /* 250px'ten küçük olmayacak şekilde tekrarlanan sütunlar */
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    max-width: 1400px;
-    /* Maksimum genişlik */
-    width: 100%;
+    /* Ekran boyutuna göre otomatik olarak 4 sütuna yerleşir */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 25px;
 }
 
-/* Film Kartları (Movie Cards) */
+/* --- Film Kartı Stilleri (Flexbox ile Düzgün Buton Hizalaması) --- */
+
 .movie-card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    /* Flexbox ile Butonu Alta Sabitleme */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    min-height: 450px;
-    background: #1e1e1e;
-    border-radius: 12px;
-    overflow: hidden;
-    /* Resmi köşelerle uyumlu hale getirir */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    /* Daha belirgin gölge */
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
-    cursor: pointer;
-    text-align: center;
-    padding-bottom: 15px;
-    border: 1px solid #333;
+    height: 100%;
+    /* Tam yüksekliği kapla */
 }
 
 .movie-card:hover {
-    transform: translateY(-5px) scale(1.02);
-    /* Hafif yukarı kayma ve büyüme */
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
-    border-color: #00bcd4;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
 }
 
 .movie-card img {
     width: 100%;
-    height: auto;
-    max-height: 400px;
-    /* Poster yüksekliğini sınırla */
+    height: 300px;
+    /* Posterlerin yüksekliklerini sabitle */
     object-fit: cover;
-    /* Resmi korurken alanı doldur */
-    border-radius: 10px 10px 0 0;
+    /* Resmin en boy oranını koru */
+    border-radius: 4px;
     margin-bottom: 10px;
 }
 
 .movie-card h3 {
-    margin: 5px 0;
-    color: #ffa940;
-    /* Başlık için turuncu renk */
     font-size: 1.2em;
+    margin-top: 5px;
+    min-height: 40px;
+    /* Başlıklar için min yükseklik */
 }
 
 .movie-card p {
-    margin: 0;
-    color: #9e9e9e;
-    font-size: 0.9em;
-}
-
-/* Hata ve Loading Mesajları */
-.error,
-.loading {
-    color: #ff0707;
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.5em;
-    padding: 50px;
-}
-
-/* Mobil Cihazlar İçin Uyumluluk */
-@media (max-width: 768px) {
-    .movie-list {
-        /* Tek bir sütun yeterli olabilir veya daha küçük iki sütun */
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 20px;
-    }
-
-    .search-box input {
-        width: 100%;
-    }
-
-    .search-box {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .search-box button {
-        width: 100%;
-        margin-top: 10px;
-    }
-}
-
-/* --- Yükleniyor (Loading Spinner) Stilleri --- */
-
-.spinner {
-    margin: 100px auto;
-    width: 70px;
-    text-align: center;
-}
-
-.spinner>div {
-    width: 18px;
-    height: 18px;
-    background-color: #00bcd4;
-    /* Tema renginizle uyumlu */
-    border-radius: 100%;
-    display: inline-block;
-    -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-}
-
-.spinner .dot2 {
-    -webkit-animation-delay: -0.16s;
-    animation-delay: -0.16s;
-}
-
-.spinner .dot1 {
-    -webkit-animation-delay: -0.32s;
-    animation-delay: -0.32s;
-}
-
-@-webkit-keyframes sk-bouncedelay {
-
-    0%,
-    80%,
-    100% {
-        -webkit-transform: scale(0)
-    }
-
-    40% {
-        -webkit-transform: scale(1.0)
-    }
-}
-
-@keyframes sk-bouncedelay {
-
-    0%,
-    80%,
-    100% {
-        transform: scale(0);
-        -webkit-transform: scale(0);
-    }
-
-    40% {
-        transform: scale(1.0);
-    }
-}
-
-/* --- Film Detay Sayfası Stilleri --- */
-
-.movie-details-container {
-    padding: 40px;
-    max-width: 1000px;
-    margin: 50px auto;
-    background-color: #1e1e1e;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-    position: relative;
-}
-
-.back-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background-color: #ff6e40;
-    color: #121212;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    z-index: 10;
-}
-
-.back-button:hover {
-    background-color: #00bcd4;
-    transform: translateX(-5px);
-}
-
-
-.movie-details-card {
-    display: flex;
-    flex-direction: column;
-    /* Mobil için dikey */
-    align-items: center;
-    gap: 30px;
-    color: #e0e0e0;
-}
-
-.details-poster {
-    width: 100%;
-    max-width: 350px;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-}
-
-.details-content {
-    text-align: center;
-    /* Mobil için ortala */
-}
-
-.details-content h2 {
-    font-size: 2.2em;
-    color: #00bcd4;
-    margin-bottom: 20px;
-    text-shadow: 0 0 8px rgba(0, 188, 212, 0.4);
-}
-
-.details-content p {
-    font-size: 1.1em;
+    color: #aaa;
     margin-bottom: 10px;
-    color: #c0c0c0;
 }
 
-.details-content p strong {
-    color: #ff6e40;
+/* İzleme Listesi Butonu Stilleri (Film Kartı İçindeki Buton) */
+
+.movie-card button.watchlist-btn {
+    /* Butonu her zaman en alta iter (Kritik) */
+    margin-top: auto;
+    padding: 8px;
+    font-size: 0.9em;
+    background-color: #444;
+    /* Normal durum */
+    color: var(--text-color);
 }
 
-/* Detay sayfası için mobil uyumluluk */
-@media (min-width: 768px) {
-    .movie-details-card {
-        flex-direction: row;
-        /* Geniş ekranlarda yatay */
-        text-align: left;
-    }
-
-    .details-content {
-        text-align: left;
-    }
+.movie-card button.watchlist-btn.listed {
+    background-color: #28a745;
+    /* Yeşil tonu (Eklendi durumu) */
+    color: white;
 }
 
-.watchlist-btn {
-    cursor: pointer;
-    border-radius: 7px;
-    margin: 15px;
+.movie-card button.watchlist-btn:hover {
+    background-color: #666;
 }
 
-.watchlist-btn:hover {
-    background-color: #00bcd4;
-    transition: 0.7s;
+.movie-card button.watchlist-btn.listed:hover {
+    background-color: #1e7e34;
+}
+
+/* --- Hata ve Yüklenme Mesajları --- */
+
+#content h2 {
+    color: #dc3545;
+    /* Kırmızı hata rengi */
+    text-align: center;
+    margin-top: 50px;
 }
