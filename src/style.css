@@ -190,3 +190,114 @@ body {
     text-align: center;
     margin-top: 50px;
 }
+
+.watchlistBtn {
+    color: #0088cc;
+}
+
+/* --- Detay Sayfası Stilleri --- */
+
+.details-container {
+    background-color: var(--card-bg);
+    /* Koyu kart arkaplanı */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    margin-top: 20px;
+}
+
+.details-title {
+    color: var(--primary-color);
+    font-size: 2.2em;
+    margin-bottom: 25px;
+    text-align: center;
+    border-bottom: 1px solid #3a3a3a;
+    padding-bottom: 15px;
+}
+
+.details-content {
+    display: flex;
+    /* İki sütun düzeni */
+    gap: 30px;
+}
+
+/* Poster Alanı */
+.details-poster-area {
+    flex-shrink: 0;
+    width: 300px;
+    text-align: center;
+}
+
+.details-poster {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.rating-box {
+    background-color: var(--secondary-color);
+    /* Vurgu rengi */
+    color: white;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 5px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+/* Bilgi Alanı */
+.details-info-area {
+    flex-grow: 1;
+    /* Kalan alanı kapla */
+    padding-top: 10px;
+}
+
+.key-info p {
+    margin-bottom: 12px;
+    font-size: 1.05em;
+    border-bottom: 1px dotted #444;
+    padding-bottom: 5px;
+}
+
+.key-info strong {
+    color: var(--primary-color);
+    display: inline-block;
+    min-width: 150px;
+    /* Etiketleri hizala */
+}
+
+/* Özet Alanı */
+.details-plot-area {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #3a3a3a;
+}
+
+.details-plot-area h3 {
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+    font-size: 1.4em;
+}
+
+/* Geri Dön Butonu */
+#backToListBtn {
+    margin-top: 30px;
+    width: 200px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Küçük ekranlar (Mobil) için düzenleme */
+@media (max-width: 768px) {
+    .details-content {
+        flex-direction: column;
+        /* Alt alta yığma */
+        gap: 20px;
+    }
+
+    .details-poster-area {
+        width: 100%;
+    }
+}
