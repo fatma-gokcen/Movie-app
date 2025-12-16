@@ -9,7 +9,11 @@ const app = document.getElementById("app");
 
 // Uygulama yapısı (Başlık ve Arama Kutusu)
 app.innerHTML = `
-    <h1>Movie App</h1>
+<div class= "header-container">
+<h1 id="appTitle">Movie App</h1>
+        <button id="watchlistBtn" class="primary-btn">İzlenme  Listem</button> 
+</div>
+   
     <div class="search-box">
         <input type="text" id="searchInput" placeholder="Search movie...">
         <button id="searchBtn">Search</button>
@@ -41,11 +45,6 @@ document.getElementById("searchInput").addEventListener("keyup", (e) => {
     }
 });
 
-document.getElementById("searchInput").addEventListener("keyup", (e) => {
-    if (e.key === "Enter") {
-        const query = document.getElementById("")
-    }
-})
 
 // URL değiştiğinde (geri/ileri butonu) içeriği güncelle
 window.addEventListener('popstate', (event) => {
@@ -80,6 +79,13 @@ document.querySelector("h1").addEventListener("click", () => {
     document.getElementById("searchInput").value = "";
 });
 
+// Watchlist butonu tıklama dinleyicisi
+document.getElementById("watchListBtn").addEventListener("click", () => {
+    navigateToWatchList();
+})
+
+
+
 //  Fonksiyonlar 
 
 // Ana sayfa açılışında rastgele filmleri yükler.
@@ -97,6 +103,7 @@ async function loadMovies() {
 
         content.innerHTML = productList(data.Search);
         addMovieCardListeners();
+        addWatchlistButtonListeners();
     } catch (err) {
         content.innerHTML = errorMessage(err.message);
     }
@@ -125,7 +132,7 @@ async function searchMovies(query) {
 
         content.innerHTML = productList(data.Search);
         addMovieCardListeners(); // <-- KRİTİK: Dinleyicileri ekle
-
+        addWatchlistButtonListeners();
     } catch (err) {
         content.innerHTML = errorMessage(err.message);
     }
@@ -158,6 +165,24 @@ function navigateToDetails(id) {
  * Verilen IMDB ID'sine göre film detaylarını API'den çeker ve render eder.
  * @param {string} id - IMDB ID
  */
+
+// LocalStorge'dan izlenme listesini çeker.
+/** 
+@returns  {string[]}
+*/
+export function getWatchlist() {
+    const watchlistJSON = localStorage.getItem('watchlist')
+    return watchlistJSON ? JSON.parse(watchlistJSON) : []
+}
+
+/**
+ * Güncel izleme listesi dizisini LocalStorage'a kaydeder.
+ * @param {string[]} watchlist - Yeni izleme listesi dizisi
+ */
+export function saveWatchlist(watchlist) {
+    // JavaScript dizisini JSON string'e dönüştürerek kaydeder.
+    localStorage.setItem('watchlist', JSON.stringify(watchlist));
+}
 async function renderMovieDetails(id) {
     content.innerHTML = loadingSpinner();
     try {
@@ -173,5 +198,96 @@ async function renderMovieDetails(id) {
         content.innerHTML = movieDetailsComponent(movieDetails);
     } catch (error) {
         content.innerHTML = errorMessage(error.message);
+    }
+}
+/**
+ * @params {string} imdbID
+ * @returns {boolean}
+ */
+export function toggleWatchList(imdbID) {
+    const watchlist = getWatchlist();
+    const index = watchlist.indexOf(imdbID)
+
+    if (index === -1) {
+        // film listesinde yoksa ekle
+        watchlist.push(imdbID)
+        saveWatchlist(watchlist);
+        return true;
+    } else {
+        // film listesinde varsa çıkar
+        watchlist.splice(index, 1);
+        saveWatchlist(watchlist);
+        return false;
+    }
+}
+
+/**
+ * İzleme listesi butonlarına tıklama olay dinleyicisi ekler.
+ */
+export function addWatchlistButtonListeners() {
+    document.querySelectorAll(".watchlist-btn").forEach(button => {
+        button.addEventListener("click", (e) => {
+            // Tıklamanın kartın ana olayını tetiklemesini engeller
+            e.stopPropagation();
+
+            const imdbID = button.dataset.imdbid;
+            const isAdded = toggleWatchList(imdbID);
+
+            // Butonun görünümünü güncelle
+            if (isAdded) {
+                button.textContent = "✅ İzlenme Listesine Eklendi";
+                button.classList.add('listed');
+            } else {
+                button.textContent = "➕ İzleme Listesine Ekle";
+                button.classList.remove('listed');
+            }
+        });
+    });
+}
+
+function navigateToWatchlist() {
+    history.pushState(null, '', '/watchlist'); // URL'yi /watchlist olarak değiştir
+    renderWatchlist();
+    document.getElementById("searchInput").value = ""; // Arama kutusunu temizle
+}
+
+/**
+ * İzleme Listesindeki filmleri LocalStorage'dan çeker ve API'den detaylarını alır.
+ */
+async function renderWatchlist() {
+    content.innerHTML = loadingSpinner();
+    // getWatchlist fonksiyonu zaten export edildiği için kullanılabilir.
+    const watchlistIDs = getWatchlist();
+
+    if (watchlistIDs.length === 0) {
+        content.innerHTML = errorMessage("İzleme listenizde henüz film bulunmamaktadır.");
+        return;
+    }
+
+    try {
+        // Tüm ID'ler için detay çekme işlemlerini paralel başlat
+        const detailPromises = watchlistIDs.map(id =>
+            fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&i=${id}&plot=short`)
+                .then(res => res.json())
+        );
+
+        // Tüm detaylar gelene kadar bekle
+        const moviesDetails = await Promise.all(detailPromises);
+
+        // Sadece başarılı yanıtları filtrele
+        const validMovies = moviesDetails.filter(movie => movie.Response === "True");
+
+        if (validMovies.length === 0) {
+            content.innerHTML = errorMessage("İzleme listenizdeki filmlerin detayları alınamadı.");
+            return;
+        }
+
+        // productList'i Watchlist içeriğiyle render et
+        content.innerHTML = productList(validMovies);
+        addMovieCardListeners();
+        addWatchlistButtonListeners();
+
+    } catch (err) {
+        content.innerHTML = errorMessage("İzleme listesi yüklenirken bir hata oluştu.");
     }
 }

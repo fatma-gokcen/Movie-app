@@ -85,6 +85,10 @@ h1 {
 
 /* Film Kartları (Movie Cards) */
 .movie-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 450px;
     background: #1e1e1e;
     border-radius: 12px;
     overflow: hidden;
@@ -302,4 +306,15 @@ h1 {
     .details-content {
         text-align: left;
     }
+}
+
+.watchlist-btn {
+    cursor: pointer;
+    border-radius: 7px;
+    margin: 15px;
+}
+
+.watchlist-btn:hover {
+    background-color: #00bcd4;
+    transition: 0.7s;
 }
