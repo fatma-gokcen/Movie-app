@@ -1,16 +1,16 @@
-// components/movieDetailsComponent.js
 export function movieDetailsComponent(movie) {
-    // Posteri kontrol et ve yer tutucu kullan
     const poster = (movie.Poster && movie.Poster !== "N/A")
         ? movie.Poster
         : "https://via.placeholder.com/300x450?text=Poster+Yok";
+
+    // Arama sorgusu oluştur (Örn: "Inception 2010 official trailer")
+    const trailerQuery = encodeURIComponent(`${movie.Title} ${movie.Year} official trailer`);
 
     return `
         <div class="details-container">
             <h2 class="details-title">${movie.Title} (${movie.Year})</h2>
             
             <div class="details-content">
-                
                 <div class="details-poster-area">
                     <img 
                         src="${poster}" 
@@ -19,10 +19,15 @@ export function movieDetailsComponent(movie) {
                         onerror="this.onerror=null;this.src='https://via.placeholder.com/300x450?text=Yüklenemedi';"
                     >
                     <div class="rating-box">IMDB Puanı: ${movie.imdbRating} / 10</div>
+                    
+                    <a href="https://www.youtube.com/results?search_query=${trailerQuery}" 
+                       target="_blank" 
+                       class="trailer-btn">
+                       🎬 Fragmanı İzle
+                    </a>
                 </div>
 
                 <div class="details-info-area"> 
-                    
                     <div class="key-info">
                         <p><strong>Yönetmen:</strong> ${movie.Director}</p>
                         <p><strong>Oyuncular:</strong> ${movie.Actors}</p>

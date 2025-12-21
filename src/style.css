@@ -339,3 +339,47 @@ FİLTRELEME
     color: white;
     cursor: pointer;
 }
+
+.trailer-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+    padding: 12px;
+    background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+}
+
+.trailer-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4);
+    filter: brightness(1.1);
+}
+
+.watchlist-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.danger-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.danger-btn:hover {
+    background-color: #a71d2a;
+    transform: scale(1.05);
+}

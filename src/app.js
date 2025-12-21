@@ -17,7 +17,7 @@ app.innerHTML = `
         <button id="watchlistBtn" class="primary-btn">İzleme Listem</button> 
     </div>
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Film arayın...">
+        <input type="text" id="searchInput" placeholder="Dizi veya film arayın...">
         <button id="searchBtn">Ara</button>
     </div>
 
@@ -245,13 +245,13 @@ function navigateToWatchlist() {
     document.getElementById("searchInput").value = "";
 }
 
+
 /**
  * İzleme Listesindeki filmleri LocalStorage'dan çeker ve API'den detaylarını alır.
  */
-
 async function renderWatchlist() {
-    content.innerHTML = loadingSpinner();
     const watchlistIDs = getWatchlist();
+    content.innerHTML = loadingSpinner();
 
     if (watchlistIDs.length === 0) {
         content.innerHTML = errorMessage("İzleme listenizde henüz film bulunmamaktadır.");
@@ -272,21 +272,34 @@ async function renderWatchlist() {
             return;
         }
 
-        // --- DOĞRU YER BURASI ---
-        // Filtreleme yapabilmek için veriyi global değişkene kaydediyoruz.
+        // Global değişkene ata
         watchlistMovies = validMovies;
 
-        content.innerHTML = productList(validMovies);
+        // Arayüzü oluştur: Temizle butonu + Film listesi
+        content.innerHTML = `
+            <div class="watchlist-actions">
+                <button id="clearAllBtn" class="danger-btn">🗑️ Tümünü Temizle</button>
+            </div>
+            <div id="watchlistContent">${productList(validMovies)}</div>
+        `;
+
+        // Olay dinleyicilerini ekle
         addMovieCardListeners();
         addWatchlistButtonListeners();
-        // -------------------------
+
+        // Temizle butonuna tıklandığında
+        document.getElementById("clearAllBtn").addEventListener("click", () => {
+            if (confirm("Tüm izleme listenizi silmek istediğinize emin misiniz?")) {
+                saveWatchlist([]); // LocalStorage temizle
+                renderWatchlist(); // Sayfayı yenile
+            }
+        });
 
     } catch (err) {
         console.error(err);
         content.innerHTML = errorMessage("İzleme listesi yüklenirken bir hata oluştu.");
     }
 }
-
 
 // --- 6. DETAY SAYFASI İŞLEVİ ---
 
