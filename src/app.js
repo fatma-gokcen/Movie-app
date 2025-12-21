@@ -13,7 +13,7 @@ const app = document.getElementById("app");
 // Uygulama yapısı (Başlık, Watchlist Butonu ve Arama Kutusu)
 app.innerHTML = `
     <div class="header-container">
-        <h1 id="appTitle"> 🎥 Movie App</h1>
+        <h1 id="appTitle"> 🎥CineTrack</h1>
         <button id="watchlistBtn" class="primary-btn">İzleme Listem</button> 
     </div>
     <div class="search-box">
