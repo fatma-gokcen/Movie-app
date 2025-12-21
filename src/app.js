@@ -13,13 +13,24 @@ const app = document.getElementById("app");
 // Uygulama yapısı (Başlık, Watchlist Butonu ve Arama Kutusu)
 app.innerHTML = `
     <div class="header-container">
-        <h1 id="appTitle">Movie App</h1>
+        <h1 id="appTitle"> 🎥 Movie App</h1>
         <button id="watchlistBtn" class="primary-btn">İzleme Listem</button> 
     </div>
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search movie...">
-        <button id="searchBtn">Search</button>
+        <input type="text" id="searchInput" placeholder="Film arayın...">
+        <button id="searchBtn">Ara</button>
     </div>
+
+<div class="filter-container">
+        <select id="genreFilter">
+            <option value="all">Tüm Türler</option>
+            <option value="Action">Aksiyon</option>
+            <option value="Comedy">Komedi</option>
+            <option value="Drama">Dram</option>
+            <option value="Horror">Korku</option>
+            <option value="Sci-Fi">Bilim Kurgu</option>
+        </select>
+</div>
     <div id="content"></div>
 `;
 
@@ -90,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+document.getElementById("genreFilter").addEventListener("change", applyGenreFilter);
 
 // --- 4. TEMEL İŞLEV FONKSİYONLARI ---
 
@@ -236,6 +248,7 @@ function navigateToWatchlist() {
 /**
  * İzleme Listesindeki filmleri LocalStorage'dan çeker ve API'den detaylarını alır.
  */
+
 async function renderWatchlist() {
     content.innerHTML = loadingSpinner();
     const watchlistIDs = getWatchlist();
@@ -246,7 +259,6 @@ async function renderWatchlist() {
     }
 
     try {
-        // Tüm detay çekme işlemlerini paralel başlat (Promise.all kullanılarak)
         const detailPromises = watchlistIDs.map(id =>
             fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&i=${id}&plot=short`)
                 .then(res => res.json())
@@ -260,11 +272,17 @@ async function renderWatchlist() {
             return;
         }
 
+        // --- DOĞRU YER BURASI ---
+        // Filtreleme yapabilmek için veriyi global değişkene kaydediyoruz.
+        watchlistMovies = validMovies;
+
         content.innerHTML = productList(validMovies);
         addMovieCardListeners();
         addWatchlistButtonListeners();
+        // -------------------------
 
     } catch (err) {
+        console.error(err);
         content.innerHTML = errorMessage("İzleme listesi yüklenirken bir hata oluştu.");
     }
 }
@@ -286,4 +304,23 @@ async function renderMovieDetails(id) {
     } catch (error) {
         content.innerHTML = errorMessage(error.message);
     }
+}
+// FİLTRELEME SAYFASI İŞLEVİ
+let watchlistMovies = []; // İzleme listesindeki detaylı verileri burada tutacağız
+
+function applyGenreFilter() {
+    const selectedGenre = document.getElementById("genreFilter").value;
+
+    if (selectedGenre === "all") {
+        content.innerHTML = productList(watchlistMovies);
+    } else {
+        const filtered = watchlistMovies.filter(movie =>
+            movie.Genre && movie.Genre.includes(selectedGenre)
+        );
+        content.innerHTML = productList(filtered);
+    }
+
+    // Filtrelemeden sonra dinleyicileri tekrar eklemeliyiz
+    addMovieCardListeners();
+    addWatchlistButtonListeners();
 }

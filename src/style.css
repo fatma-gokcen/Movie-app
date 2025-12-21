@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
 /* --- Genel Sıfırlamalar ve Temel Stil --- */
 :root {
     --bg-color: #1a1a1a;
@@ -19,7 +21,7 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
     padding: 20px;
@@ -43,28 +45,33 @@ body {
 }
 
 #appTitle {
-    color: var(--primary-color);
+    color: blueviolet;
     cursor: pointer;
     font-size: 2.5em;
     font-weight: bold;
+
 }
 
 /* --- Buton Stilleri (Watchlist ve Ekle) --- */
 
-.primary-btn {
-    padding: 10px 15px;
-    background-color: var(--primary-color);
-    color: white;
+.primary-btn,
+#searchBtn {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
     border: none;
-    border-radius: 6px;
+    border-radius: 12px;
+    padding: 10px 24px;
+    font-weight: 600;
+    color: white;
     cursor: pointer;
-    font-size: 1em;
-    font-weight: bold;
-    transition: background-color 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.39);
 }
 
-.primary-btn:hover {
-    background-color: #0066a2;
+.primary-btn:hover,
+#searchBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+    filter: brightness(1.1);
 }
 
 /* --- Arama Kutusu Stilleri --- */
@@ -206,13 +213,22 @@ body {
     margin-top: 20px;
 }
 
+/* Detay başlığı */
 .details-title {
-    color: var(--primary-color);
-    font-size: 2.2em;
-    margin-bottom: 25px;
-    text-align: center;
-    border-bottom: 1px solid #3a3a3a;
-    padding-bottom: 15px;
+    background: linear-gradient(to right, #fff, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+
+/* Bilgi etiketleri */
+.details-info-area p strong {
+    color: #6366f1;
+    margin-right: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
 }
 
 .details-content {
@@ -300,4 +316,26 @@ body {
     .details-poster-area {
         width: 100%;
     }
+}
+
+/**
+FİLTRELEME 
+*/
+.filter-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    font-weight: bold;
+}
+
+#genreFilter {
+    padding: 8px 15px;
+    border: 2px solid var(--primary-color);
+    border-radius: 20px;
+    /* Yuvarlak köşeler daha genç bir hava verir */
+    background-color: var(--card-bg);
+    color: white;
+    cursor: pointer;
 }
