@@ -168,7 +168,7 @@ function addMovieCardListeners() {
 
 /**
  * URL'yi günceller ve film detaylarını yükler.
- * @param {string} id - IMDB ID
+ * @param {string} id - OMDB ID
  */
 function navigateToDetails(id) {
     history.pushState({ id: id }, '', `?movie=${id}`);
@@ -223,7 +223,7 @@ export function addWatchlistButtonListeners() {
             e.stopPropagation();
 
             const imdbID = button.dataset.imdbid;
-            const isAdded = toggleWatchList(imdbID); // İsim tutarlılığı doğru: toggleWatchList
+            const isAdded = toggleWatchList(imdbID);
 
             if (isAdded) {
                 button.textContent = "✅ İzlenme Listesine Eklendi";
