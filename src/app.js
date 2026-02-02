@@ -9,6 +9,9 @@ import { movieDetailsComponent } from "./components/movieDetailsComponent.js"; /
 
 // HTML içindeki "app" elementini seçiyoruz.
 const app = document.getElementById("app");
+const discoveryKeywords = [
+    "love", "war", "man", "dark", "life", "hero", "death", "night", "future", "game", "world", "girl", "crime", "horror"
+];
 
 // Uygulama yapısı (Başlık, Watchlist Butonu ve Arama Kutusu)
 app.innerHTML = `
@@ -39,7 +42,8 @@ const content = document.getElementById("content");
 const API_KEY = import.meta.env.VITE_API_KEY;
 const movies = ["batman", "joker", "avengers", "inception"];
 const randomMovie = movies[Math.floor(Math.random() * movies.length)];
-const API_URL = `https://www.omdbapi.com/?apikey=${API_KEY}&s=${randomMovie}`;
+
+const API_URL = `https://www.omdbapi.com/?apikey=${API_KEY}&s=&type=movie`;
 
 
 // --- 3. OLAY DİNLEYİCİLERİ (EVENT LISTENERS) ---
@@ -105,26 +109,42 @@ document.getElementById("genreFilter").addEventListener("change", applyGenreFilt
 
 // --- 4. TEMEL İŞLEV FONKSİYONLARI ---
 
-// Ana sayfa açılışında rastgele filmleri yükler.
+
 async function loadMovies() {
     content.innerHTML = loadingSpinner();
 
     try {
-        const response = await fetch(API_URL);
-        const data = await response.json();
+        const randomKeywords = discoveryKeywords
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 4); // 4 farklı arama
 
-        if (!data.Search) {
-            throw new Error(data.Error || "Movie not found!");
-        }
+        const requests = randomKeywords.map(keyword =>
+            fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${keyword}&type=movie`)
+                .then(res => res.json())
+        );
 
-        content.innerHTML = productList(data.Search);
+        const results = await Promise.all(requests);
+
+        let movies = results
+            .filter(r => r.Response === "True")
+            .flatMap(r => r.Search);
+
+        // IMDb ID’ye göre duplicate temizle
+        const uniqueMovies = Array.from(
+            new Map(movies.map(m => [m.imdbID, m])).values()
+        );
+
+        // Karıştır
+        uniqueMovies.sort(() => Math.random() - 0.5);
+
+        content.innerHTML = productList(uniqueMovies);
         addMovieCardListeners();
-        addWatchlistButtonListeners(); // Watchlist dinleyicisi eklendi
+        addWatchlistButtonListeners();
+
     } catch (err) {
-        content.innerHTML = errorMessage(err.message);
+        content.innerHTML = errorMessage("Filmler yüklenemedi.");
     }
 }
-
 
 /**
  * Kullanıcının girdiği sorgu ile film arar.

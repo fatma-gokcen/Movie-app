@@ -39,7 +39,7 @@ export function movieDetailsComponent(movie) {
                     </div>
 
                     <div class="details-plot-area">
-                        <h3>Özet (Plot)</h3>
+                        <h3>Özet</h3>
                         <p>${movie.Plot}</p>
                     </div>
                 </div>
