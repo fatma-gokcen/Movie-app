@@ -97,8 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (movieID) {
         renderMovieDetails(movieID);
-    } else if (path === '/watchlist') {
-        renderWatchlist();
+
     } else {
         loadMovies();
     }
