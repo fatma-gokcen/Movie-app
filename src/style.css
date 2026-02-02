@@ -330,7 +330,7 @@ FİLTRELEME
     font-weight: bold;
 }
 
-#genreFilter {
+#yearFilter {
     padding: 8px 15px;
     border: 2px solid var(--primary-color);
     border-radius: 20px;

@@ -25,14 +25,13 @@ app.innerHTML = `
     </div>
 
 <div class="filter-container">
-        <select id="genreFilter">
-            <option value="all">Tüm Türler</option>
-            <option value="Action">Aksiyon</option>
-            <option value="Comedy">Komedi</option>
-            <option value="Drama">Dram</option>
-            <option value="Horror">Korku</option>
-            <option value="Sci-Fi">Bilim Kurgu</option>
-        </select>
+    <select id="yearFilter">
+        <option value="all">Tüm Yıllar</option>
+        <option value="2020+">2020 ve sonrası</option>
+        <option value="2010-2019">2010 - 2019</option>
+        <option value="2000-2009">2000 - 2009</option>
+        <option value="1990-1999">1990 - 1999</option>
+    </select>
 </div>
     <div id="content"></div>
 `;
@@ -105,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-document.getElementById("genreFilter").addEventListener("change", applyGenreFilter);
+document.getElementById("yearFilter").addEventListener("change", applyYearFilter);
 
 // --- 4. TEMEL İŞLEV FONKSİYONLARI ---
 
@@ -136,7 +135,7 @@ async function loadMovies() {
 
         // Karıştır
         uniqueMovies.sort(() => Math.random() - 0.5);
-
+        homeMovies = uniqueMovies;
         content.innerHTML = productList(uniqueMovies);
         addMovieCardListeners();
         addWatchlistButtonListeners();
@@ -340,20 +339,27 @@ async function renderMovieDetails(id) {
 }
 // FİLTRELEME SAYFASI İŞLEVİ
 let watchlistMovies = []; // İzleme listesindeki detaylı verileri burada tutacağız
+let homeMovies = [];
 
-function applyGenreFilter() {
-    const selectedGenre = document.getElementById("genreFilter").value;
+function applyYearFilter() {
+    const value = document.getElementById("yearFilter").value;
 
-    if (selectedGenre === "all") {
-        content.innerHTML = productList(watchlistMovies);
-    } else {
-        const filtered = watchlistMovies.filter(movie =>
-            movie.Genre && movie.Genre.includes(selectedGenre)
-        );
-        content.innerHTML = productList(filtered);
+    let filtered = homeMovies;
+
+    if (value !== "all") {
+        filtered = homeMovies.filter(movie => {
+            const year = parseInt(movie.Year);
+
+            if (value === "2020+") return year >= 2020;
+            if (value === "2010-2019") return year >= 2010 && year <= 2019;
+            if (value === "2000-2009") return year >= 2000 && year <= 2009;
+            if (value === "1990-1999") return year >= 1990 && year <= 1999;
+
+            return true;
+        });
     }
 
-    // Filtrelemeden sonra dinleyicileri tekrar eklemeliyiz
+    content.innerHTML = productList(filtered);
     addMovieCardListeners();
     addWatchlistButtonListeners();
 }
